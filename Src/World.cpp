@@ -46,7 +46,6 @@ void World::aff(RenderWindow &window) const
     for (auto line : cell)
         for (auto one : line.second) {
             hexagon.setPosition(getHexagonPos(Vector2i(line.first, one.first)));
-            hexagon.move(window.getSize().x / 2, window.getSize().y / 2); // ?
             if (one.second.type == "Wall")
                 hexagon.setFillColor(Color::White);
             else if (one.second.type == "Ground")

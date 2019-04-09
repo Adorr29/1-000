@@ -11,7 +11,7 @@
 size_t Ant::antNum = 1;
 
 Ant::Ant(const World &_world, const Vector2i &_pos)
-    : world(_world), id(antNum++), hp(10), hpMax(10), stock(0), stockMax(10), pos(_pos)
+    : world(_world), id(antNum++), hp(10), hpMax(10), stock(0), stockMax(10), pos(_pos), angle(0)
 {
 }
 
@@ -49,13 +49,24 @@ const Vector2i &Ant::getPos() const
     return pos;
 }
 
+const Int8 &Ant::getAngle() const
+{
+    return angle;
+}
+
 void Ant::aff(RenderWindow &window) const
 {
-    (void)window;
     Uint32 hexagonRadius = world.getHexagonRadius();
     Vector2f hexagonPos = world.getHexagonPos(pos);
-    double var = sqrt(pow(-0.5 * hexagonRadius, 2) + pow(sin(M_PI / 3) * hexagonRadius, 2)) / 2;
+    float tmp = sqrt(pow(-0.5 * hexagonRadius, 2) + pow(sin(M_PI / 3) * hexagonRadius, 2)) / 2;
+    float size = sqrt(pow(hexagonRadius, 2) - pow(tmp, 2)) * 2;
+    Texture texture; // !!!
+    RectangleShape rectange(Vector2f(size, size)); // !!!
 
-    printf("len : %f\n", sqrt(pow(hexagonRadius, 2) - pow(var, 2)));
-    // TODO
+    texture.loadFromFile("Resources/Texture/ant.png"); // tmp
+    rectange.setOrigin(rectange.getSize() / (float)2);
+    rectange.setPosition(hexagonPos);
+    rectange.setRotation(angle * 60);
+    rectange.setTexture(&texture);
+    window.draw(rectange);
 }

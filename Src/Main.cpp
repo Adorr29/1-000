@@ -19,6 +19,7 @@ int main()
     VideoMode videoMode = VideoMode::getDesktopMode();
     RenderWindow window(videoMode, "1-000", Style::Fullscreen, settings);
     World world;
+    Ant ant(world, Vector2i(0, 0)); // tmp
     bool grapBool;
     Vector2f grap;
 
@@ -59,6 +60,7 @@ int main()
         }
         window.clear(Color(50, 50, 50));
         world.aff(window); // ?
+        ant.aff(window); // ?
         window.display();
     }
     return 0;

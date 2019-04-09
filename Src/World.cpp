@@ -5,6 +5,7 @@
 ** World.cpp
 */
 
+#include <cmath>
 #include "World.hpp"
 
 World::World()
@@ -17,22 +18,6 @@ World::World()
 
 World::~World()
 {
-}
-
-void World::aff(RenderWindow &window) const
-{
-    ConvexShape hexagon = getHexagon();
-
-    for (auto line : cell)
-        for (auto one : line.second) {
-            hexagon.setPosition(getHexagonPos(Vector2i(line.first, one.first)));
-            hexagon.move(window.getSize().x / 2, window.getSize().y / 2); // ?
-            if (one.second.type == "Wall")
-                hexagon.setFillColor(Color::White);
-            else if (one.second.type == "Ground")
-                hexagon.setFillColor(Color(0, 0, 0, 100));
-            window.draw(hexagon);
-        }
 }
 
 ConvexShape World::getHexagon() const
@@ -52,6 +37,22 @@ Vector2f World::getHexagonPos(const Vector2i &pos) const
 const Uint32 &World::getHexagonRadius() const
 {
     return hexagonRadius;
+}
+
+void World::aff(RenderWindow &window) const
+{
+    ConvexShape hexagon = getHexagon();
+
+    for (auto line : cell)
+        for (auto one : line.second) {
+            hexagon.setPosition(getHexagonPos(Vector2i(line.first, one.first)));
+            hexagon.move(window.getSize().x / 2, window.getSize().y / 2); // ?
+            if (one.second.type == "Wall")
+                hexagon.setFillColor(Color::White);
+            else if (one.second.type == "Ground")
+                hexagon.setFillColor(Color(0, 0, 0, 100));
+            window.draw(hexagon);
+        }
 }
 
 void World::sizeUp()

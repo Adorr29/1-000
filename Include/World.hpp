@@ -10,7 +10,6 @@
 
 #include <map>
 #include <SFML/Graphics.hpp>
-#include <cmath>
 
 using namespace std;
 using namespace sf;
@@ -33,10 +32,10 @@ class World
 public:
     World();
     ~World();
-    void aff(RenderWindow &window) const;
     ConvexShape getHexagon() const;
     Vector2f getHexagonPos(const Vector2i &pos) const;
     const Uint32 &getHexagonRadius() const;
+    void aff(RenderWindow &window) const;
 
 private:
     void sizeUp(); // ?

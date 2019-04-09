@@ -8,6 +8,7 @@
 #include <iostream> // ?
 #include <SFML/Graphics.hpp>
 #include "World.hpp"
+#include "Ant.hpp"
 
 using namespace sf;
 

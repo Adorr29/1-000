@@ -14,6 +14,7 @@ INCDIR		=	Include/
 
 SRC		=	$(SRCDIR)Main.cpp \
 			$(SRCDIR)World.cpp \
+			$(SRCDIR)Ant.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 

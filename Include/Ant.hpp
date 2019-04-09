@@ -26,6 +26,7 @@ public:
     const size_t &getStock() const;
     const size_t &getStockMax() const;
     const Vector2i &getPos() const;
+    const Int8 &getAngle() const;
     void aff(RenderWindow &window) const;
 
 private:
@@ -36,6 +37,7 @@ private:
     size_t stock;
     size_t stockMax;
     Vector2i pos;
+    Int8 angle;
 
 private:
     static size_t antNum; // ?

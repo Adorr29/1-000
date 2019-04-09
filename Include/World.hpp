@@ -34,9 +34,12 @@ public:
     World();
     ~World();
     void aff(RenderWindow &window) const;
+    ConvexShape getHexagon() const;
+    Vector2f getHexagonPos(const Vector2i &pos) const;
+    const Uint32 &getHexagonRadius() const;
 
 private:
-    void sizeUp();
+    void sizeUp(); // ?
 
 private:
     const Uint32 hexagonRadius;

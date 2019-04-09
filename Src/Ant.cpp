@@ -63,7 +63,7 @@ void Ant::aff(RenderWindow &window) const
     Texture texture; // !!!
     RectangleShape rectange(Vector2f(size, size)); // !!!
 
-    texture.loadFromFile("Resources/Texture/ant.png"); // tmp
+    texture.loadFromFile("Resources/Texture/Ant.png"); // tmp
     rectange.setOrigin(rectange.getSize() / (float)2);
     rectange.setPosition(hexagonPos);
     rectange.setRotation(angle * 60);

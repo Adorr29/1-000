@@ -27,6 +27,9 @@ public:
     const size_t &getStockMax() const;
     const Vector2i &getPos() const;
     const Int8 &getAngle() const;
+    void rotateLeft();
+    void rotateRight();
+    bool moveForward();
     void aff(RenderWindow &window) const;
 
 private:

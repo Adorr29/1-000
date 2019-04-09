@@ -54,6 +54,41 @@ const Int8 &Ant::getAngle() const
     return angle;
 }
 
+void Ant::rotateLeft()
+{
+    angle--;
+    while (angle < 0)
+        angle += 6;
+}
+
+void Ant::rotateRight()
+{
+    angle++;
+    while (angle >= 6)
+        angle -= 6;
+}
+
+bool Ant::moveForward()
+{
+    if (angle == 0)
+        pos.y--;
+    else if (angle == 1)
+        pos.x++;
+    else if (angle == 2) {
+        pos.x++;
+        pos.y++;
+    }
+    else if (angle == 3)
+        pos.y++;
+    else if (angle == 4)
+        pos.x--;
+    else if (angle == 5) {
+        pos.x--;
+        pos.y--;
+    }
+    return true;
+}
+
 void Ant::aff(RenderWindow &window) const
 {
     Uint32 hexagonRadius = world.getHexagonRadius();

@@ -57,6 +57,14 @@ int main()
                     view.zoom(1 / (2.0 * abs(event.mouseWheel.delta)));
                 window.setView(view);
             }
+            else if (event.type == Event::KeyPressed) { // tmp for fun
+                if (event.key.code == Keyboard::Right)
+                    ant.rotateRight();
+                else if (event.key.code == Keyboard::Left)
+                    ant.rotateLeft();
+                else if (event.key.code == Keyboard::Up)
+                    ant.moveForward();
+            }
         }
         window.clear(Color(50, 50, 50));
         world.aff(window); // ?

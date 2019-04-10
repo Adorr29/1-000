@@ -70,22 +70,27 @@ void Ant::rotateRight()
 
 bool Ant::moveForward()
 {
+    Vector2i newPos(pos);
+
     if (angle == 0)
-        pos.y--;
+        newPos.y--;
     else if (angle == 1)
-        pos.x++;
+        newPos.x++;
     else if (angle == 2) {
-        pos.x++;
-        pos.y++;
+        newPos.x++;
+        newPos.y++;
     }
     else if (angle == 3)
-        pos.y++;
+        newPos.y++;
     else if (angle == 4)
-        pos.x--;
+        newPos.x--;
     else if (angle == 5) {
-        pos.x--;
-        pos.y--;
+        newPos.x--;
+        newPos.y--;
     }
+    if (world.getCell(newPos).type == "Wall")
+        return false;
+    pos = newPos;
     return true;
 }
 

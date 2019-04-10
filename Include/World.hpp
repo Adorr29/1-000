@@ -32,12 +32,14 @@ class World
 public:
     World();
     ~World();
+    const Cell &getCell(const Vector2i &pos) const;
     ConvexShape getHexagon() const;
     Vector2f getHexagonPos(const Vector2i &pos) const;
     const Uint32 &getHexagonRadius() const;
     void aff(RenderWindow &window) const;
 
 private:
+    bool cellExist(const Vector2i &pos) const;
     void sizeUp(); // ?
 
 private:

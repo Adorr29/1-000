@@ -6,6 +6,7 @@
 */
 
 #include <iostream> // ?
+#include <list>
 #include <SFML/Graphics.hpp>
 #include "World.hpp"
 #include "Ant.hpp"
@@ -19,10 +20,12 @@ int main()
     VideoMode videoMode = VideoMode::getDesktopMode();
     RenderWindow window(videoMode, "1-000", Style::Fullscreen, settings);
     World world;
-    Ant ant(world, Vector2i(0, 0)); // tmp
+    list<Ant> antList;
     bool grapBool;
     Vector2f grap;
 
+    for (size_t i = 0; i < 10; i++)
+        antList.push_back(Ant(world, Vector2i(0, 0)));
     window.setFramerateLimit(30);
     while (window.isOpen()) {
         for (Event event; window.pollEvent(event);) {
@@ -57,18 +60,28 @@ int main()
                     view.zoom(1 / (2.0 * abs(event.mouseWheel.delta)));
                 window.setView(view);
             }
-            else if (event.type == Event::KeyPressed) { // tmp for fun
+            /*else if (event.type == Event::KeyPressed) { // tmp for fun
                 if (event.key.code == Keyboard::Right)
                     ant.rotateRight();
                 else if (event.key.code == Keyboard::Left)
                     ant.rotateLeft();
                 else if (event.key.code == Keyboard::Up)
                     ant.moveForward();
+                    }*/
+        }
+        for (Ant &ant : antList) { // tmp for fun
+            if (rand() % 3) {
+                if (rand() % 2)
+                    ant.rotateRight();
+                else
+                    ant.rotateLeft();
             }
+            ant.moveForward();
         }
         window.clear(Color(50, 50, 50));
         world.aff(window); // ?
-        ant.aff(window); // ?
+        for (const Ant &ant : antList)
+            ant.aff(window); // ?
         window.display();
     }
     return 0;

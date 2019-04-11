@@ -41,6 +41,8 @@ public:
 private:
     bool cellExist(const Vector2i &pos) const;
     void sizeUp(); // ?
+    Vector2i randCellPos(const string &type = "") const;
+    void scatterCell(const string &type, const Vector2i &pos, const size_t &size);
 
 private:
     const Uint32 hexagonRadius;

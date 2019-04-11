@@ -21,7 +21,12 @@ World::World()
     cell[0][0].type = "Wall";
     for (size_t i = 0; i < 10; i++)
         sizeUp();
-    cell[0][0].type = "Anthill";
+    scatterCell("Anthill", Vector2i(0, 0), 3);
+    for (size_t i = rand() % 3; i < 4; i++) {
+        const Vector2i pos = randCellPos("Ground");
+
+        scatterCell("Wall", pos, 2 + rand() % 3);
+    }
 }
 
 World::~World()
@@ -90,4 +95,40 @@ void World::sizeUp()
             newCell[line.first][one.first].type = "Ground";
         }
     cell = newCell;
+}
+
+Vector2i World::randCellPos(const string &type) const
+{
+    vector<Vector2i> allCell;
+
+    for (auto line : cell)
+        for (auto one : line.second)
+            if (type.empty() || cell.at(line.first).at(one.first).type == type)
+                allCell.push_back(Vector2i(line.first, one.first));
+    //if (!allCell.size())
+    //throw Error("No cell of type \"" + type + "\""); // TODO
+    return allCell[rand() % allCell.size()];
+}
+
+void World::scatterCell(const string &type, const Vector2i &pos, const size_t &size)
+{
+    vector<Vector2i> scatte = {pos};
+
+    if (cell[pos.x][pos.y].type != "Ground")
+        return;
+    cell[pos.x][pos.y].type = type;
+    for (size_t n = 1; n < size; n++) {
+        vector<Vector2i> freeCell;
+
+        for (const Vector2i &st : scatte) // ?
+            for (Int8 i = -1; i <= 1; i++)
+                for (Int8 j = -1; j <= 1; j++)
+                    if (i + j)
+                        if (cellExist(Vector2i(st.x + i, st.y + j)) && cell[st.x + i][st.y + j].type == "Ground")
+                            freeCell.push_back(Vector2i(st.x + i, st.y + j));
+        if (!freeCell.size())
+            break;
+        scatte.push_back(freeCell[rand() % freeCell.size()]);
+        cell[scatte.back().x][scatte.back().y].type = type;
+    }
 }

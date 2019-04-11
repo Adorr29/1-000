@@ -15,6 +15,7 @@ using namespace sf;
 
 int main()
 {
+    srand(time(NULL));
     ContextSettings settings;
     settings.antialiasingLevel = 8; // ?
     VideoMode videoMode = VideoMode::getDesktopMode();

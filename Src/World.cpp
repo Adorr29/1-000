@@ -22,11 +22,8 @@ World::World()
     for (size_t i = 0; i < 10; i++)
         sizeUp();
     scatterCell("Anthill", Vector2i(0, 0), 3);
-    for (size_t i = rand() % 3; i < 4; i++) {
-        const Vector2i pos = randCellPos("Ground");
-
-        scatterCell("Wall", pos, 2 + rand() % 3);
-    }
+    for (size_t i = rand() % 3; i < 4; i++)
+        scatterCell("Wall", randCellPos("Ground"), 2 + rand() % 3);
 }
 
 World::~World()

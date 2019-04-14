@@ -23,8 +23,8 @@ struct Pheromone
 struct Cell
 {
     string type;
+    map<string, Uint32> resource;
     //vector<Pheromone> pheromone;
-    //Tab *next[6]; // 6 for hexagon
 };
 
 class World
@@ -36,6 +36,8 @@ public:
     ConvexShape getHexagon() const;
     Vector2f getHexagonPos(const Vector2i &pos) const;
     const Uint32 &getHexagonRadius() const;
+    Uint32 putResource(const Vector2i &pos, const string &type, const Uint32 &quantity);
+    Uint32 pickResource(const Vector2i &pos, const string &type, const Uint32 &quantity);
     void aff(RenderWindow &window) const;
 
 private:

@@ -5,13 +5,14 @@
 ** Ant.cpp
 */
 
+#include <iostream> // tmp
 #include <cmath>
 #include "Ant.hpp"
 
 size_t Ant::antNum = 1;
 
-Ant::Ant(const World &_world, const Vector2i &_pos)
-    : world(_world), id(antNum++), hp(10), hpMax(10), stock(0), stockMax(10), pos(_pos), angle(0)
+Ant::Ant(World &_world, const Vector2i &_pos)
+    : world(_world), id(antNum++), hp(10), hpMax(10), quantityMax(10), pos(_pos), angle(0)
 {
 }
 
@@ -24,24 +25,14 @@ const size_t &Ant::getId() const
     return id;
 }
 
-const size_t &Ant::getHp() const
+const Uint32 &Ant::getHp() const
 {
     return hp;
 }
 
-const size_t &Ant::getHpMax() const
+const Uint32 &Ant::getHpMax() const
 {
     return hpMax;
-}
-
-const size_t &Ant::getStock() const
-{
-    return stock;
-}
-
-const size_t &Ant::getStockMax() const
-{
-    return stockMax;
 }
 
 const Vector2i &Ant::getPos() const
@@ -94,19 +85,67 @@ bool Ant::moveForward()
     return true;
 }
 
+Uint32 Ant::putResource(const string &type, const Uint32 &quantity)
+{
+    Uint32 put;
+    Uint32 newQuantity;
+
+    if (resource.find(type) == resource.end())
+        return 0;
+    if (quantity > resource[type])
+        newQuantity = resource[type];
+    else
+        newQuantity = quantity;
+    put = world.putResource(pos, type, newQuantity);
+    resource[type] -= put;
+    return put;
+}
+
+Uint32 Ant::pickResource(const string &type, const Uint32 &quantity)
+{
+    Uint32 pick;
+    Uint32 newQuantity;
+    Uint32 totalResource = 0;
+
+    for (auto one : resource)
+        totalResource += one.second;
+    if (quantity > quantityMax - totalResource)
+        newQuantity = quantityMax - totalResource;
+    else
+        newQuantity = quantity;
+    pick = world.pickResource(pos, type, newQuantity);
+    resource[type] += pick;
+    return pick;
+}
+
+void Ant::ai()
+{
+    if (rand() % 3) {
+        if (rand() % 2)
+            rotateRight();
+        else
+            rotateLeft();
+    }
+    moveForward();
+    pickResource("Food", 10);
+    if (world.getCell(pos).type == "Anthill")
+        putResource("Food", 20);
+}
+
 void Ant::aff(RenderWindow &window) const
 {
-    Uint32 hexagonRadius = world.getHexagonRadius();
-    Vector2f hexagonPos = world.getHexagonPos(pos);
-    float tmp = sqrt(pow(-0.5 * hexagonRadius, 2) + pow(sin(M_PI / 3) * hexagonRadius, 2)) / 2;
-    float size = sqrt(pow(hexagonRadius, 2) - pow(tmp, 2)) * 2;
+    const Uint32 hexagonRadius = world.getHexagonRadius();
+    const float tmp = sqrt(pow(-0.5 * hexagonRadius, 2) + pow(sin(M_PI / 3) * hexagonRadius, 2)) / 2;
+    const float size = sqrt(pow(hexagonRadius, 2) - pow(tmp, 2)) * 2;
     Texture texture; // !!!
     RectangleShape rectange(Vector2f(size, size)); // !!!
 
     texture.loadFromFile("Resources/Texture/Ant.png"); // tmp
     rectange.setOrigin(rectange.getSize() / (float)2);
-    rectange.setPosition(hexagonPos);
+    rectange.setPosition(world.getHexagonPos(pos));
     rectange.setRotation(angle * 60);
     rectange.setTexture(&texture);
+    if (resource.find("Food") != resource.end() && resource.at("Food") > 0) // tmp
+        rectange.setFillColor(Color::Green);
     window.draw(rectange);
 }

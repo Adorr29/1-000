@@ -18,27 +18,28 @@ using namespace sf;
 class Ant
 {
 public:
-    Ant(const World &_world, const Vector2i &_pos);
+    Ant(World &_world, const Vector2i &_pos);
     ~Ant();
     const size_t &getId() const;
-    const size_t &getHp() const;
-    const size_t &getHpMax() const;
-    const size_t &getStock() const;
-    const size_t &getStockMax() const;
+    const Uint32 &getHp() const;
+    const Uint32 &getHpMax() const;
     const Vector2i &getPos() const;
     const Int8 &getAngle() const;
-    void rotateLeft();
-    void rotateRight();
-    bool moveForward();
+    void rotateLeft(); // private ?
+    void rotateRight(); // private ?
+    bool moveForward(); // private ?
+    Uint32 putResource(const string &type, const Uint32 &quantity); // private ?
+    Uint32 pickResource(const string &type, const Uint32 &quantity); // private ?
+    void ai();
     void aff(RenderWindow &window) const;
 
 private:
-    const World &world; // ?
+    World &world; // ?
     const size_t id; // ?
-    size_t hp;
-    size_t hpMax;
-    size_t stock;
-    size_t stockMax;
+    Uint32 hp;
+    Uint32 hpMax;
+    map<string, Uint32> resource; // add getter TODO
+    Uint32 quantityMax; // add getter TODO
     Vector2i pos;
     Int8 angle;
 

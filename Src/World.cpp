@@ -5,6 +5,7 @@
 ** World.cpp
 */
 
+#include <iostream> // tmp
 #include <cmath>
 #include "World.hpp"
 
@@ -24,6 +25,14 @@ World::World()
     scatterCell("Anthill", Vector2i(0, 0), 3);
     for (size_t i = rand() % 3; i < 4; i++)
         scatterCell("Wall", randCellPos("Ground"), 2 + rand() % 3);
+    for (size_t i = rand() % 5; i < 8; i++) // ?
+        scatterCell("Food", randCellPos("Ground"), 1 + rand() % 2);
+    for (auto &line : cell)
+        for (auto &one : line.second)
+            if (one.second.type == "Food") {
+                putResource(Vector2i(line.first, one.first), "Food", 1 + rand() % 3);
+                one.second.type = "Ground";
+            }
 }
 
 World::~World()
@@ -56,16 +65,54 @@ const Uint32 &World::getHexagonRadius() const
     return hexagonRadius;
 }
 
+Uint32 World::putResource(const Vector2i &pos, const string &type, const Uint32 &quantity)
+{
+    //if (!cellExist(pos))
+    //throw Error("Cell does not exist"); // TODO
+    //if (cell[pos.x][pos.y].resource[type] + quantity > quantityMax) // TODO
+    cell[pos.x][pos.y].resource[type] += quantity;
+    return quantity;
+}
+
+Uint32 World::pickResource(const Vector2i &pos, const string &type, const Uint32 &quantity)
+{
+    //if (!cellExist(pos))
+    //throw Error("Cell does not exist"); // TODO
+    if (cell[pos.x][pos.y].resource.find(type) == cell[pos.x][pos.y].resource.end())
+        return 0;
+    if (cell[pos.x][pos.y].resource[type] >= quantity) {
+        cell[pos.x][pos.y].resource[type] -= quantity;
+        return quantity;
+    }
+    else {
+        const Uint32 newQuantity = cell[pos.x][pos.y].resource[type];
+
+        cell[pos.x][pos.y].resource[type] = 0;
+        return newQuantity;
+    }
+}
+
 void World::aff(RenderWindow &window) const
 {
     ConvexShape hexagon = getHexagon();
+    const float tmp = sqrt(pow(-0.5 * hexagonRadius, 2) + pow(sin(M_PI / 3) * hexagonRadius, 2)) / 2;
+    const float size = sqrt(pow(hexagonRadius, 2) - pow(tmp, 2)) * 2;
+    Texture texture; // !!!
+    RectangleShape rectange(Vector2f(size, size)); // !!!
 
+    texture.loadFromFile("Resources/Texture/Food.png"); // tmp
+    rectange.setOrigin(rectange.getSize() / (float)2);
+    rectange.setTexture(&texture);
     for (auto line : cell)
         for (auto one : line.second)
             if (typeColor.find(one.second.type) != typeColor.end()) {
                 hexagon.setPosition(getHexagonPos(Vector2i(line.first, one.first)));
                 hexagon.setFillColor(typeColor.at(one.second.type));
                 window.draw(hexagon);
+                if (one.second.resource.find("Food") != one.second.resource.end() && one.second.resource["Food"] > 0) {
+                    rectange.setPosition(getHexagonPos(Vector2i(line.first, one.first)));
+                    window.draw(rectange);
+                }
             }
 }
 
@@ -88,7 +135,7 @@ void World::sizeUp()
                 for (Int8 j = -1; j <= 1; j++)
                     if (i + j)
                         if (!cellExist(Vector2i(line.first + i, one.first + j)))
-                            newCell[line.first + i][one.first + j] = {"Wall"};
+                            newCell[line.first + i][one.first + j].type = "Wall";
             newCell[line.first][one.first].type = "Ground";
         }
     cell = newCell;

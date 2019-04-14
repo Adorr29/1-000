@@ -5,7 +5,7 @@
 ** Main.cpp
 */
 
-#include <iostream> // ?
+#include <iostream> // tmp
 #include <list>
 #include <SFML/Graphics.hpp>
 #include "World.hpp"
@@ -25,7 +25,7 @@ int main()
     bool grapBool;
     Vector2f grap;
 
-    for (size_t i = 0; i < 10; i++)
+    for (size_t i = 0; i < 5; i++)
         antList.push_back(Ant(world, Vector2i(0, 0)));
     window.setFramerateLimit(30);
     while (window.isOpen()) {
@@ -70,15 +70,8 @@ int main()
                     ant.moveForward();
                     }*/
         }
-        for (Ant &ant : antList) { // tmp for fun
-            if (rand() % 3) {
-                if (rand() % 2)
-                    ant.rotateRight();
-                else
-                    ant.rotateLeft();
-            }
-            ant.moveForward();
-        }
+        for (Ant &ant : antList) // tmp for fun
+            ant.ai();
         window.clear(Color(50, 50, 50));
         world.aff(window); // ?
         for (const Ant &ant : antList)

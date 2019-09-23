@@ -20,12 +20,13 @@ int main()
     settings.antialiasingLevel = 8; // ?
     VideoMode videoMode = VideoMode::getDesktopMode();
     RenderWindow window(videoMode, "1-000", Style::Fullscreen, settings);
-    World world;
+    World world(40);
     list<Ant> antList;
-    bool grapBool;
+    bool grapBool = false;
     Vector2f grap;
+    float zoom = 1.0;
 
-    for (size_t i = 0; i < 5; i++)
+    for (size_t i = 0; i < 1; i++)
         antList.push_back(Ant(world, Vector2i(0, 0)));
     window.setFramerateLimit(30);
     while (window.isOpen()) {
@@ -52,24 +53,17 @@ int main()
                     grap = Vector2f(event.mouseMove.x, event.mouseMove.y);
                 }
             }
-            else if (event.type == Event::MouseWheelMoved) {
-                View view = window.getView();
-
-                if (event.mouseWheel.delta <= 0)
-                    view.zoom(2 * abs(event.mouseWheel.delta));
-                else
-                    view.zoom(1 / (2.0 * abs(event.mouseWheel.delta)));
-                window.setView(view);
-            }
-            /*else if (event.type == Event::KeyPressed) { // tmp for fun
-                if (event.key.code == Keyboard::Right)
-                    ant.rotateRight();
-                else if (event.key.code == Keyboard::Left)
-                    ant.rotateLeft();
-                else if (event.key.code == Keyboard::Up)
-                    ant.moveForward();
-                    }*/
+            else if (event.type == Event::MouseWheelMoved)
+                zoom -= event.mouseWheel.delta * 0.1;
         }
+        if (zoom != 1.0) {
+            View view = window.getView();
+
+            view.zoom(zoom);
+            window.setView(view);
+            zoom = (zoom + 1) / 2.0;
+        }
+        world.update();
         for (Ant &ant : antList) // tmp for fun
             ant.ai();
         window.clear(Color(50, 50, 50));

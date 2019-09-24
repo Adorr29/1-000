@@ -96,22 +96,7 @@ bool Ant::moveForward()
 {
     Vector2i newPosition(position);
 
-    if (angle == 0)
-        newPosition.y--;
-    else if (angle == 1)
-        newPosition.x++;
-    else if (angle == 2) {
-        newPosition.x++;
-        newPosition.y++;
-    }
-    else if (angle == 3)
-        newPosition.y++;
-    else if (angle == 4)
-        newPosition.x--;
-    else if (angle == 5) {
-        newPosition.x--;
-        newPosition.y--;
-    }
+    newPosition += angleWay[angle];
     if (world.getCell(newPosition).type == "Wall")
         return false;
     position = newPosition;
